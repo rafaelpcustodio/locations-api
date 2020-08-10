@@ -53,7 +53,7 @@ time passed until now)
 - POST /api/v1/locations 
 (create a location to a license plate based on the request body)
 
-- POST /api/v1/locations/monimum-distance 
+- POST /api/v1/locations/minimum-distance 
 (calculate distance between a location and a list of locations)
 ```
 
