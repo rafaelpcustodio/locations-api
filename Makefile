@@ -1,7 +1,7 @@
 IMAGE := ${DOCKER_USERNAME}/locations-api
 
 build:
-	npm clean install
+	mvn clean install
 
 image:
 	docker build -t IMAGE .
