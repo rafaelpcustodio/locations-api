@@ -1,5 +1,6 @@
 IMAGE := ${DOCKER_USERNAME}/locations-api
 
+
 build:
 	mvn clean install
 
