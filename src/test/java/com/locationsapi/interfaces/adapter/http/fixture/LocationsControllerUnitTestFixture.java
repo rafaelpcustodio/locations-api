@@ -1,5 +1,6 @@
 package com.locationsapi.interfaces.adapter.http.fixture;
 
+import com.locationsapi.interfaces.adapter.http.dto.request.locations.LocationRequestDTO;
 import com.locationsapi.interfaces.adapter.http.dto.response.locations.LocationDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,5 +26,16 @@ public class LocationsControllerUnitTestFixture {
     locations.add(validLocation(41.4092F, 2.17404F));
     locations.add(validLocation(41.40293F, 2.17404F));
     return locations;
+  }
+
+  public static LocationRequestDTO validRequestLocationDTO(
+      final String licensePlate,
+      final Float latitude,
+      final Float longitude) {
+    return LocationRequestDTO.builder()
+        .licensePlate(licensePlate)
+        .latitude(latitude)
+        .longitude(longitude)
+        .build();
   }
 }

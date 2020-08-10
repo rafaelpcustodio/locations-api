@@ -1,25 +1,36 @@
 package com.locationsapi.interfaces.adapter.http;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
+import com.locationsapi.interfaces.adapter.http.dto.request.locations.LocationRequestDTO;
 import com.locationsapi.interfaces.adapter.http.dto.response.locations.LocationDTO;
 import com.locationsapi.interfaces.adapter.http.dto.response.locations.LocationsResponseDTO;
 import com.locationsapi.interfaces.adapter.http.fixture.LocationsControllerUnitTestFixture;
-import com.locationsapi.interfaces.adapter.http.handler.error.ControllerExceptionHandler;
-import com.locationsapi.interfaces.adapter.http.handler.error.LocationsController;
+import com.locationsapi.interfaces.adapter.http.handler.ControllerExceptionHandler;
+import com.locationsapi.interfaces.adapter.http.handler.error.Error;
 import com.locationsapi.interfaces.adapter.serialization.JacksonConfiguration;
+import com.locationsapi.usecases.CreateLocation;
 import com.locationsapi.usecases.GetLocations;
+import com.locationsapi.usecases.exceptions.LocationsNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -41,6 +52,9 @@ public class LocationsControllerUnitTest {
 
   @InjectMocks
   private LocationsController locationsController;
+
+  @Mock
+  private CreateLocation createLocation;
 
   @Mock
   private GetLocations getLocations;
@@ -99,5 +113,69 @@ public class LocationsControllerUnitTest {
         .queryParam("dateTime", dateTime.toString()))
         .andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(response)));
+  }
+
+  @Test
+  @DisplayName("Should accept vehicle location info successfully")
+  public void shouldCreateVehicleGeoLocationInfoSuccessfully() throws Exception {
+
+    final Float expectedLatitude = 41.4092F;
+    final Float expectedLongitude = 2.17396F;
+
+    LocationRequestDTO locationRequestDTO =
+        LocationsControllerUnitTestFixture
+            .validRequestLocationDTO(VALID_LICENSE_PLATE, expectedLatitude, expectedLongitude);
+
+    doNothing().when(createLocation)
+        .execute(any());
+
+    mockMvc.perform(post(PATH_LOCATIONS)
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(locationRequestDTO)))
+        .andExpect(status().isAccepted());
+
+    final ArgumentCaptor<VehicleLocationDTO> argument =
+        ArgumentCaptor.forClass(VehicleLocationDTO.class);
+    verify(createLocation, times(1))
+        .execute(argument.capture());
+
+    Assertions.assertEquals(expectedLatitude, argument.getValue().getLatitude());
+    Assertions.assertEquals(expectedLongitude, argument.getValue().getLongitude());
+    Assertions.assertEquals(VALID_LICENSE_PLATE, argument.getValue().getLicensePlate());
+  }
+
+  @Test
+  @DisplayName("Should not accept vehicle geo location info due to not license plate regex format")
+  public void shouldNotCreateVehicleGeoLocationInfoErrorDueToWrongLicensePlate() throws Exception {
+    final String wrongFormatLicensePlate = "E431TYUY";
+    final Float expectedLatitude = 41.4092F;
+    final Float expectedLongitude = 2.17396F;
+
+    LocationRequestDTO locationRequestDTO =
+        LocationsControllerUnitTestFixture.validRequestLocationDTO(wrongFormatLicensePlate, expectedLatitude, expectedLongitude);
+
+    mockMvc.perform(post(PATH_LOCATIONS)
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(locationRequestDTO)))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @DisplayName("Should not find locations")
+  public void shouldNotLocationsException() throws Exception {
+    final String wrongFormatLicensePlate = "E431TYUY";
+
+    when(getLocations.execute(any(), any())).thenThrow(new LocationsNotFoundException());
+
+    final Error errorResponse = Error.builder()
+        .message("Locations not found")
+        .build();
+
+    mockMvc.perform(get(PATH_LOCATIONS + "/" + wrongFormatLicensePlate)
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
   }
 }

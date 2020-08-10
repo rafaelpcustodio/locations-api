@@ -1,5 +1,6 @@
 package com.locationsapi.interfaces.adapter.http.dto.request.locations;
 
+import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
@@ -28,4 +29,12 @@ public class LocationRequestDTO {
   @NotNull(message = "Longitude is mandatory")
   @ApiModelProperty(value = "Longitude from the desired vehicle location.", required = true)
   private Float longitude;
+
+  public VehicleLocationDTO toMessage() {
+    return VehicleLocationDTO.builder()
+        .licensePlate(this.getLicensePlate())
+        .latitude(this.getLatitude())
+        .longitude(this.getLongitude())
+        .build();
+  }
 }

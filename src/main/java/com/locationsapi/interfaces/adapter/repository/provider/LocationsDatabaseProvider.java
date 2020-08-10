@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LocationsDatabaseProvider {
-  public void save() {
+  public void save(final VehicleLocationEntity vehicleLocationEntity) {
   }
 
   public List<VehicleLocationEntity> findAllVehicleLocationsByLicensePlate(final String licensePlate) {
