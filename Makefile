@@ -4,7 +4,7 @@ build:
 	mvn clean install
 
 image:
-	docker build -t IMAGE .
+	docker build -t $(IMAGE) .
 
 push-image:
 	docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
