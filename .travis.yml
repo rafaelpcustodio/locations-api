@@ -1,9 +1,12 @@
 language: java
 sudo: true
+dist: trusty
 jdk:
   - oraclejdk9
 services:
   - 'docker'
+before_install:
+  - chmod +x mvnw
 
 # Build the application.
 script:
