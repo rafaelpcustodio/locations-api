@@ -1,5 +1,8 @@
 package com.locationsapi.interfaces.adapter.repository.provider;
 
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.locationsapi.entity.VehicleLocationEntity;
@@ -52,5 +55,22 @@ public class LocationsDatabaseProviderUnitTest {
     List<VehicleLocationEntity> actualList = locationsDatabaseProvider
         .findAllVehicleLocationsByLicensePlate(licensePlate);
     Assertions.assertEquals(9, actualList.size());
+  }
+
+  @Test
+  @DisplayName("Should save vehicle location")
+  public void shouldSaveVehicleLocation() {
+    final String licensePlate = "EET4787";
+    final Float expectedLatitude = 41.4092F;
+    final Float expectedLongitude = 2.17396F;
+    final VehicleLocationEntity vehicleLocationEntity =
+        LocationsDatabaseProviderUnitTestFixture.validLocation(
+            licensePlate, expectedLatitude, expectedLongitude,LocalDateTime.now()
+        );
+
+    doNothing().when(locationsRepository).save(vehicleLocationEntity);
+    locationsDatabaseProvider.save(vehicleLocationEntity);
+    verify(locationsRepository, times(1))
+        .save(vehicleLocationEntity);
   }
 }

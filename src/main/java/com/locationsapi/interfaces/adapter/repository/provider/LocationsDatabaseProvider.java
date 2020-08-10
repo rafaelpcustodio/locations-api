@@ -14,6 +14,7 @@ public class LocationsDatabaseProvider {
   private final LocationsRepository locationRepository;
 
   public void save(final VehicleLocationEntity vehicleLocationEntity) {
+    locationRepository.save(vehicleLocationEntity);
   }
 
   public List<VehicleLocationEntity> findAllVehicleLocationsByLicensePlate(final String licensePlate) {

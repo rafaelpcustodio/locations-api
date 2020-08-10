@@ -1,13 +1,13 @@
-package com.locationsapi.interfaces.adapter.amqp.listener.locationsevent;
+package com.locationsapi.interfaces.adapter.amqp.listener.locationevent;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.locationsservice.entity.Event;
-import com.locationsservice.entity.VehicleLocationEntity;
-import com.locationsservice.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
-import com.locationsservice.interfaces.adapter.amqp.listener.locationevent.fixture.LocationCreationEventListenerUnitTestFixture;
-import com.locationsservice.interfaces.adapter.repository.provider.LocationsDatabaseProvider;
+import com.locationsapi.entity.Event;
+import com.locationsapi.entity.VehicleLocationEntity;
+import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
+import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.fixture.LocationCreationEventListenerUnitTestFixture;
+import com.locationsapi.interfaces.adapter.repository.provider.LocationsDatabaseProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

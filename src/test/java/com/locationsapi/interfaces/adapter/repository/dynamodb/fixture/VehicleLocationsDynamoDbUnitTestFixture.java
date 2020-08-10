@@ -6,6 +6,7 @@ import static com.locationsapi.interfaces.adapter.repository.dynamodb.definition
 import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LONGITUDE;
 
 import com.locationsapi.entity.VehicleLocationEntity;
+import com.locationsapi.interfaces.adapter.repository.dynamodb.builder.VehicleLocationsPutItemRequestBuilder;
 import com.locationsapi.interfaces.adapter.repository.dynamodb.builder.VehicleLocationsQueryRequestBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import software.amazon.awssdk.core.SdkResponse;
 import software.amazon.awssdk.http.HttpStatusCode;
 import software.amazon.awssdk.http.SdkHttpResponse;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
@@ -105,6 +107,12 @@ public class VehicleLocationsDynamoDbUnitTestFixture {
         LocalDateTime.of(2020, 8,3,23,35,33)
     ));
     return items;
+  }
+
+  public static PutItemRequest putItemRequestFromEntity(final VehicleLocationEntity vehicleLocationEntity) {
+    return VehicleLocationsPutItemRequestBuilder.builder()
+        .withEntity(vehicleLocationEntity)
+        .build();
   }
 
   public static Map<String, AttributeValue> validLocationItem(

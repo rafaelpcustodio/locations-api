@@ -1,4 +1,4 @@
-package com.locationsservice.interfaces.adapter.amqp.configuration;
+package com.locationsapi.interfaces.adapter.amqp.configuration;
 
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import java.util.Collections;

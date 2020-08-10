@@ -1,12 +1,12 @@
-package com.locationsservice.interfaces.adapter.repository.dynamodb.builder;
+package com.locationsapi.interfaces.adapter.repository.dynamodb.builder;
 
-import static com.locationsservice.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.CREATED_AT;
-import static com.locationsservice.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LATITUDE;
-import static com.locationsservice.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LICENSE_PLATE;
-import static com.locationsservice.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LOCATIONS_TABLE;
-import static com.locationsservice.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LONGITUDE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.CREATED_AT;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LATITUDE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LICENSE_PLATE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LOCATIONS_TABLE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LONGITUDE;
 
-import com.locationsservice.entity.VehicleLocationEntity;
+import com.locationsapi.entity.VehicleLocationEntity;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;

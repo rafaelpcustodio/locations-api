@@ -4,6 +4,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LATITUDE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LICENSE_PLATE;
+import static com.locationsapi.interfaces.adapter.repository.dynamodb.definitions.VehicleLocationsDynamoDbDefinitions.LONGITUDE;
+
 
 import com.locationsapi.entity.VehicleLocationEntity;
 import com.locationsapi.interfaces.adapter.repository.LocationsRepository;
@@ -21,6 +25,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.PutItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 
@@ -78,5 +84,35 @@ public class VehicleLocationsRepositoryDynamoDbUnitTest {
         );
     Assertions.assertThat(locations.get(0).getLicensePlate()).isEqualTo(validLicensePlate);
     Assertions.assertThat(locations.size()).isEqualTo(4);
+  }
+
+  @Test
+  void shouldSave() {
+    final String licensePlate = "EET4787";
+    final Float expectedLatitude = 41.4092F;
+    final Float expectedLongitude = 2.17396F;
+    final VehicleLocationEntity vehicleLocationEntity =
+        VehicleLocationsDynamoDbUnitTestFixture
+            .validVehicleLocation(licensePlate, expectedLatitude, expectedLongitude);
+
+    final PutItemRequest putItemRequest =
+        VehicleLocationsDynamoDbUnitTestFixture
+            .putItemRequestFromEntity(vehicleLocationEntity);
+
+    final PutItemResponse itemResponse = (PutItemResponse) VehicleLocationsDynamoDbUnitTestFixture
+        .responseWithSuccess();
+
+    locationsRepository.save(vehicleLocationEntity);
+
+    final ArgumentCaptor<PutItemRequest> captured =
+        ArgumentCaptor.forClass(PutItemRequest.class);
+    when(dynamoDbClient.putItem(putItemRequest)).thenReturn(itemResponse);
+    verify(dynamoDbClient, times(1)).putItem(captured.capture());
+    Assertions.assertThat(captured.getValue().item().get(LICENSE_PLATE.getValue()))
+        .isEqualTo(putItemRequest.item().get(LICENSE_PLATE.getValue()));
+    Assertions.assertThat(captured.getValue().item().get(LATITUDE.getValue()))
+        .isEqualTo(putItemRequest.item().get(LATITUDE.getValue()));
+    Assertions.assertThat(captured.getValue().item().get(LONGITUDE.getValue()))
+        .isEqualTo(putItemRequest.item().get(LONGITUDE.getValue()));
   }
 }

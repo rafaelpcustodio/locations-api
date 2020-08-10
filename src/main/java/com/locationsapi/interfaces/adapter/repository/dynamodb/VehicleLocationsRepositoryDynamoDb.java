@@ -2,6 +2,7 @@ package com.locationsapi.interfaces.adapter.repository.dynamodb;
 
 import com.locationsapi.entity.VehicleLocationEntity;
 import com.locationsapi.interfaces.adapter.repository.LocationsRepository;
+import com.locationsapi.interfaces.adapter.repository.dynamodb.builder.VehicleLocationsPutItemRequestBuilder;
 import com.locationsapi.interfaces.adapter.repository.dynamodb.builder.VehicleLocationsQueryRequestBuilder;
 import com.locationsapi.interfaces.adapter.repository.dynamodb.converter.RepositoryResponseConverter;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
 @Repository
@@ -29,6 +31,14 @@ class VehicleLocationsRepositoryDynamoDb implements LocationsRepository {
         .stream()
         .map(vehicleLocationsResponseConverter::fromEntry)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void save(VehicleLocationEntity vehicleLocationEntity) {
+    final PutItemRequest putItemRequest = VehicleLocationsPutItemRequestBuilder.builder()
+        .withEntity(vehicleLocationEntity)
+        .build();
+    dynamoDbClient.putItem(putItemRequest);
   }
 
   @Override

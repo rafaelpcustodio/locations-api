@@ -1,4 +1,4 @@
-package com.locationsapi.interfaces.adapter.amqp.listener.locationsevent.fixture;
+package com.locationsapi.interfaces.adapter.amqp.listener.locationevent.fixture;
 
 import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
 

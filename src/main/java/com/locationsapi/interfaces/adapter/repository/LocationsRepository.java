@@ -10,4 +10,5 @@ public interface LocationsRepository {
 
   List<VehicleLocationEntity> findAllVehicleLocationsByLicensePlate(String licensePlate);
 
+  void save(VehicleLocationEntity vehicleLocationEntity);
 }
