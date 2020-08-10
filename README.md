@@ -79,7 +79,7 @@ https://github.com/localstack/localstack
 Amazon Environment and you  want to start it inside an EC2, all you have
 to do is to check its image on docker hub:
 
-https://hub.docker.com/repository/docker/rafaelpcustodio/locations-service
+https://hub.docker.com/repository/docker/rafaelpcustodio/locations-api
 
 Don't forget to change the environment varialbes for the names of your
 queues and tables url inside amazon services. Additionally, you have to 
