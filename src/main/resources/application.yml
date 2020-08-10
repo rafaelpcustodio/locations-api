@@ -1,0 +1,16 @@
+app:
+  repository:
+    locations:
+      name: locations
+
+aws:
+  dynamodb:
+    endpoint: ${DYNAMO_ENDPOINT}
+  sqs:
+    creation-vehicle-location-queue:
+      name: creation-vehicle-location-queue
+      url: ${VEHICLE_QUEUE_URL}
+    endpoint: ${VEHICLE_QUEUE_ENDPOINT}
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${SECRET_ACCESS_KEY}
+    region: ${AWS_REGION}

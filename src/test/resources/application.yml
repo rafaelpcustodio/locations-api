@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+aws:
+  dynamodb:
+    endpoint: http://localhost:4569
+  sqs:
+    endpoint: http://localhost:4576
+    accessKey: accessKey
+    secretKey: secretKey
+    region: sa-east-1
+    creation-vehicle-location-queue:
+      name: creation-vehicle-location-queue
+      url: http://localhost:4576/queue/creation-vehicle-location-queue

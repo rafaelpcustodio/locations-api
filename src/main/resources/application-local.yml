@@ -1,0 +1,10 @@
+aws:
+  dynamodb:
+    endpoint: ${DYNAMO_ENDPOINT}
+  sqs:
+    creation-vehicle-location-queue:
+      url: ${VEHICLE_QUEUE_URL}
+    endpoint: ${VEHICLE_QUEUE_ENDPOINT}
+    accessKey: accessKey
+    secretKey: secretKey
+    region: sa-east-1
