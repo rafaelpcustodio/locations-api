@@ -12,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.locationsapi.interfaces.adapter.amqp.listener.locationevent.dto.VehicleLocationDTO;
 import com.locationsapi.interfaces.adapter.http.dto.request.locations.LocationRequestDTO;
+import com.locationsapi.interfaces.adapter.http.dto.request.locations.minimumdistance.MinimumDistanceLocationDTO;
+import com.locationsapi.interfaces.adapter.http.dto.request.locations.minimumdistance.MinimumDistanceRequestDTO;
 import com.locationsapi.interfaces.adapter.http.dto.response.locations.LocationDTO;
 import com.locationsapi.interfaces.adapter.http.dto.response.locations.LocationsResponseDTO;
 import com.locationsapi.interfaces.adapter.http.fixture.LocationsControllerUnitTestFixture;
@@ -19,6 +21,7 @@ import com.locationsapi.interfaces.adapter.http.handler.ControllerExceptionHandl
 import com.locationsapi.interfaces.adapter.http.handler.error.Error;
 import com.locationsapi.interfaces.adapter.serialization.JacksonConfiguration;
 import com.locationsapi.usecases.CreateLocation;
+import com.locationsapi.usecases.FindMinimumDistance;
 import com.locationsapi.usecases.GetLocations;
 import com.locationsapi.usecases.exceptions.LocationsNotFoundException;
 import java.time.LocalDateTime;
@@ -58,6 +61,9 @@ public class LocationsControllerUnitTest {
 
   @Mock
   private GetLocations getLocations;
+
+  @Mock
+  private FindMinimumDistance findMinimumDistance;
 
   private MockMvc mockMvc;
 
@@ -116,8 +122,34 @@ public class LocationsControllerUnitTest {
   }
 
   @Test
+  @DisplayName("Should get minimum distance between a location and a list of locations")
+  public void shouldGetMinimumDistanceSuccessfully() throws Exception {
+    final Float expectedLatitude = 41.40286F;
+    final Float expectedLongitude = 2.17404F;
+
+    final List<MinimumDistanceLocationDTO> locations =
+        LocationsControllerUnitTestFixture.validLocationsDTO();
+    final MinimumDistanceLocationDTO locationToBeEvaluated =
+        LocationsControllerUnitTestFixture
+            .validMinimumDistanceLocationDTO(expectedLatitude, expectedLongitude);
+    final MinimumDistanceRequestDTO requestMinimumDistanceDTO =
+        MinimumDistanceRequestDTO.builder()
+            .currentLocation(locationToBeEvaluated)
+            .locationsPlaces(locations)
+            .build();
+    mockMvc.perform(post(PATH_LOCATIONS + "/minimum-distance")
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(requestMinimumDistanceDTO)))
+        .andExpect(status().isOk());
+
+    verify(findMinimumDistance, times(1))
+        .execute(any(), any());
+  }
+
+  @Test
   @DisplayName("Should accept vehicle location info successfully")
-  public void shouldCreateVehicleGeoLocationInfoSuccessfully() throws Exception {
+  public void shouldCreateVehicleLocationInfoSuccessfully() throws Exception {
 
     final Float expectedLatitude = 41.4092F;
     final Float expectedLongitude = 2.17396F;
@@ -147,7 +179,7 @@ public class LocationsControllerUnitTest {
 
   @Test
   @DisplayName("Should not accept vehicle geo location info due to not license plate regex format")
-  public void shouldNotCreateVehicleGeoLocationInfoErrorDueToWrongLicensePlate() throws Exception {
+  public void shouldNotCreateVehicleLocationInfoErrorDueToWrongLicensePlate() throws Exception {
     final String wrongFormatLicensePlate = "E431TYUY";
     final Float expectedLatitude = 41.4092F;
     final Float expectedLongitude = 2.17396F;
@@ -164,14 +196,10 @@ public class LocationsControllerUnitTest {
 
   @Test
   @DisplayName("Should not find locations")
-  public void shouldNotLocationsException() throws Exception {
+  public void shouldNotFindLocationsException() throws Exception {
     final String wrongFormatLicensePlate = "E431TYUY";
 
     when(getLocations.execute(any(), any())).thenThrow(new LocationsNotFoundException());
-
-    final Error errorResponse = Error.builder()
-        .message("Locations not found")
-        .build();
 
     mockMvc.perform(get(PATH_LOCATIONS + "/" + wrongFormatLicensePlate)
         .contentType(MediaType.APPLICATION_JSON)
