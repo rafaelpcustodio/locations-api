@@ -1,4 +1,4 @@
-IMAGE := ${DOCKER_USERNAME}/locations-service
+IMAGE := ${DOCKER_USERNAME}/locations-api
 
 build:
 	npm clean install
