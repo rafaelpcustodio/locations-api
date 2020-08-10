@@ -15,7 +15,7 @@ it retrieves establishments that can be used to search.
 
 Preparing environment
 ```
-git clone https://github.com/rafaelpcustodio/locations-service.git
+git clone https://github.com/rafaelpcustodio/locations-api.git
 ```
 
 Starting application locally
