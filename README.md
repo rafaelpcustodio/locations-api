@@ -1,4 +1,4 @@
-# locations-service
+# locations-api
 This API is responsible to bring vehicles location data based on latitude and longitude. 
 It also calculates the minimum distance between one location and a list of them. Moreover,
 it retrieves establishments that can be used to search.
@@ -28,7 +28,7 @@ After finishing the previous command, type the next one:
 
 docker-compose up
 
-This command will build two images: localstack and location-service. 
+This command will build two images: localstack and location-api. 
 The first one is the image responsible to start SQS and DynamoDB from 
 localstack image. The second one will start this API using Dockerfile.
 ```
@@ -84,5 +84,5 @@ https://hub.docker.com/repository/docker/rafaelpcustodio/locations-api
 Don't forget to change the environment varialbes for the names of your
 queues and tables url inside amazon services. Additionally, you have to 
 remove the "build" statement on docker-compose and place "image" followed
-by the image name: rafaelpcustodio/locations-service:v2.
+by the image name: rafaelpcustodio/locations-api:v1.
 ```
