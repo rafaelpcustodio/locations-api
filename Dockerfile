@@ -4,7 +4,7 @@ MAINTAINER "Volkswagen"
 ENV PORT 8080
 EXPOSE 8080
 
-COPY target/locations-service.jar /opt/application.jar
+COPY target/locations-api.jar /opt/application.jar
 
 WORKDIR /opt
 
