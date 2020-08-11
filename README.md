@@ -50,7 +50,7 @@ time passed until now)
 
 ### CI-CD
 If you want to check the build pipeline, you can access via
-[Locations API Travis](https://travis-ci.org/github/rafaelpcustodio/locations-api/builds)
+[Locations API Travis](https://travis-ci.com/github/rafaelpcustodio/locations-api)
 
 ### Additional info and Troubleshooting
 1- If you want to add more establishments locally. You can change
