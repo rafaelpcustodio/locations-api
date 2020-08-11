@@ -37,7 +37,7 @@ You'll see 4 end-points:
 - GET /api/v1/establishments 
 (returns all establishments created with localstack shell script)
 
-- GET /api/v1/locations/{license-plate}?dateTime=(ISO DateTime query param)  
+- GET /api/v1/locations/{license-plate}?dateTime=(ISO DateTime query param.Ex: 2020-08-10T16:54:06.810Z)  
 (returns all locations of the license plate and optionally with a 
 dateTime as a query param. The locations retrieved will be from this date 
 time passed until now)
