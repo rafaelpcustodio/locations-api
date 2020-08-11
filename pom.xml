@@ -15,7 +15,7 @@
 	<description>Locations API</description>
 
 	<properties>
-		<artifact.name>locations-service</artifact.name>
+		<artifact.name>locations-api</artifact.name>
 		<aws-sdk-version>2.5.66</aws-sdk-version>
 		<dynamo-db-local-version>1.11.86</dynamo-db-local-version>
 		<hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
