@@ -1,5 +1,4 @@
 FROM adoptopenjdk/openjdk8:slim
-MAINTAINER "Volkswagen"
 
 ENV PORT 8080
 EXPOSE 8080
